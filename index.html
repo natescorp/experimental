@@ -109,11 +109,11 @@
         }
       };
 
-      var handlerCameraPermission = (event) => {
+      var handlerCameraPermission = async (event) => {
         event.preventDefault();
         getPermission('camera');
         try{
-          var stream = navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+          var stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
           var video = document.querySelector('video');
           video.srcObject = stream;
           video.onloadedmetadata = function(e) {
