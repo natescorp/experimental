@@ -41,6 +41,7 @@
       try {
         var status = await navigator.permissions;
         console.log('status', status);
+        pLog.innerHTML = JSON.stringify(status);
       } catch (error) {
         console.error('error', error);
         pLog.innerHTML = JSON.stringify(error);
@@ -51,8 +52,9 @@
       try {
         var status = await navigator.permissions.query({ name: permissonName });
         console.log('status', status);
+        pLog.innerHTML = JSON.stringify(status);
         status.onchange = () => {
-          console.log('geolocation permission state has changed to ', this.state);
+          console.log('${permissonName} permission state has changed to ', this.state);
         };
       } catch (error) {
         console.error('error', error);
