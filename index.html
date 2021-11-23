@@ -14,6 +14,9 @@
   <button id="camera">Camera</button>
   <button id="vibrate">Vibrate</button>
 </div>
+<div>
+  <p id="log"></p>
+</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function(){
@@ -21,6 +24,7 @@
     var btnNotification = document.querySelector('#notification');
     var btnCamera = document.querySelector('#camera');
     var btnVibrate = document.querySelector('#vibrate');
+    var pLog = document.querySelector('p#log');
 
     var getAllPermissions = async () => {
       try {
@@ -28,6 +32,7 @@
         console.log('status', status);
       } catch (error) {
         console.error('error', error);
+        pLog.innerHTML = JSON.stringify(error);
       }
     };
 
@@ -40,6 +45,7 @@
         };
       } catch (error) {
         console.error('error', error);
+        pLog.innerHTML = JSON.stringify(error);
       }
     };
 
@@ -71,6 +77,7 @@
       },
       function(err) {
          console.log("The following error occurred: " + err.name);
+         pLog.innerHTML = JSON.stringify(err.name);
       });
       consool.log(test);
     };
