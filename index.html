@@ -1,110 +1,136 @@
 <!DOCTYPE html>
 <html>
   <style>
+    html{
+      font-family: 'Droid Sans Fallback','Ubuntu', 'Sans', serif;
+      font-size: calc(14px + (18 - 14) * ( (100vw - 480px) / ( 1024 - 480) ));
+    }
     body{
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 95vh;
+    }
+    div{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
     }
     button{
-      font-size: 20px;
+      font-size: 2rem;
+      color: #fff;
+      background-color: #269cf5;
+      border-radius: 1rem;
+      padding: .5rem 1rem;
+    }
+    p{
+      font-size: 2.5rem;
+    }
+    p#log{
+      background-color: #a10000;
+      color: #ccc;
     }
     video{
-      width: 90vw;
+      max-height: 60vh;
+      max-width: 90vw;
+      border: 1px dotted red;
     }
   </style>
 <body>
-<div>
-  <h1>My First Heading</h1>
-  <p>My first paragraph.</p>
-</div>
-<div>
-  <video></video>
-</div>
-<div>
-  <button id="permissions">Permissions</button>
-  <button id="notification">Notification</button>
-  <button id="camera">Camera</button>
-  <button id="vibrate">Vibrate</button>
-</div>
-<div>
-  <p id="log"></p>
-</div>
+  <div id="statuses">
+    <p id="notificationsStatus">Notifications: wait</p>
+    <p id="cameraStatus">Camera: wait</p>
+  </div>
+  <div>
+    <video></video>
+  </div>
+  <div>
+    <button id="notificationsBtn">Notification</button>
+    <button id="cameraBtn">Camera</button>
+    <button id="vibrateBtn">Vibrate</button>
+  </div>
+  <div>
+    <p id="log"></p>
+  </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    var btnPermissions = document.querySelector('#permissions');
-    var btnNotification = document.querySelector('#notification');
-    var btnCamera = document.querySelector('#camera');
-    var btnVibrate = document.querySelector('#vibrate');
-    var pLog = document.querySelector('p#log');
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      var btnNotification = document.querySelector('#notificationsBtn');
+      var btnCamera = document.querySelector('#cameraBtn');
+      var btnVibrate = document.querySelector('#vibrateBtn');
+      var pLog = document.querySelector('p#log');
 
-    var getAllPermissions = async () => {
-      try {
-        var status = await navigator.permissions;
-        console.log('status', status);
-        pLog.innerHTML = status?.state;
-      } catch (error) {
-        console.error('error', error);
-        pLog.innerHTML = JSON.stringify(error);
-      }
-    };
+      var getPermission = async (permissonName) => {
+        try {
+          var status = await navigator.permissions.query({ name: permissonName });
+          console.log(`#${permissonName}Btn`);
+          if(status.state === 'prompt'){
+            let selector = document.querySelector(`#${permissonName}Status`);
+            selector.innerText = status.state;
+            selector.style.color = '#ff0';
+            selector.style.backgroundColor = '#0af';
+          }
+          if(status.state === 'granted'){
+            let selector = document.querySelector(`#${permissonName}Status`);
+            selector.innerText = status.state;
+            selector.style.color = '#0fa';
+            selector.style.backgroundColor = '#aaf';
+          }
+          if(status.state === 'denied'){
+            let selector = document.querySelector(`#${permissonName}Status`);
+            selector.innerText = status.state;
+            selector.style.color = '#f00';
+            selector.style.backgroundColor = '#ff0';
+          }
+          console.log('status', status);
+          pLog.innerHTML = status?.state;
+          status.onchange = () => {
+            console.log(`${permissonName} permission state has changed to ${this.state}`);
+          };
+        } catch (error) {
+          console.error('error', error);
+          pLog.innerHTML = JSON.stringify(error);
+        }
+      };
 
-    var getPermission = async (permissonName) => {
-      try {
-        var status = await navigator.permissions.query({ name: permissonName });
-        console.log('status', status);
-        pLog.innerHTML = status?.state;
-        status.onchange = () => {
-          console.log('${permissonName} permission state has changed to ', this.state);
-        };
-      } catch (error) {
-        console.error('error', error);
-        pLog.innerHTML = JSON.stringify(error);
-      }
-    };
+      var handlerNotificationPermission = (event) => {
+        event.preventDefault();
+        getPermission('notifications');
+      };
 
-    var handlerPermissions = (event) => {
-      event.preventDefault();
-      getAllPermissions();
-    };
+      var handlerVibrate = (event) => {
+        event.preventDefault();
+        try{
+          window.navigator.vibrate([200, 100, 200]);
+        } catch (error) {
+          console.error('error', error);
+          pLog.innerHTML = JSON.stringify(error);
+        }
+      };
 
-    var handlerNotificationPermission = (event) => {
-      event.preventDefault();
-      getPermission('notifications');
-    };
+      var handlerCameraPermission = (event) => {
+        event.preventDefault();
+        getPermission('camera');
+        var test = navigator.getUserMedia({ audio: false, video: true },
+        function(stream) {
+          var video = document.querySelector('video');
+          video.srcObject = stream;
+          video.onloadedmetadata = function(e) {
+            video.play();
+          };
+        },
+        function(err) {
+          console.log("The following error occurred: " + err.name);
+          pLog.innerHTML = JSON.stringify(err.name);
+        });
+        consol.log(test);
+      };
 
-    var handlerVibrate = (event) => {
-      event.preventDefault();
-      try{
-        window.navigator.vibrate([200, 100, 200]);
-      } catch (error) {
-        console.error('error', error);
-        pLog.innerHTML = JSON.stringify(error);
-      }
-    };
-
-    var handlerCameraPermission = (event) => {
-      event.preventDefault();
-      getPermission('camera');
-      var test = navigator.getUserMedia({ audio: false, video: true },
-      function(stream) {
-         var video = document.querySelector('video');
-         video.srcObject = stream;
-         video.onloadedmetadata = function(e) {
-           video.play();
-         };
-      },
-      function(err) {
-         console.log("The following error occurred: " + err.name);
-         pLog.innerHTML = JSON.stringify(err.name);
-      });
-      consool.log(test);
-    };
-
-    btnPermissions.addEventListener('click', handlerPermissions);
-    btnNotification.addEventListener('click', handlerNotificationPermission);
-    btnCamera.addEventListener('click', handlerCameraPermission);
-    btnVibrate.addEventListener('click', handlerVibrate);
-  });
-</script>
+      btnNotification.addEventListener('click', handlerNotificationPermission);
+      btnCamera.addEventListener('click', handlerCameraPermission);
+      btnVibrate.addEventListener('click', handlerVibrate);
+    });
+  </script>
 </body>
 </html>
