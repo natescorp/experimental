@@ -41,7 +41,7 @@
       try {
         var status = await navigator.permissions;
         console.log('status', status);
-        pLog.innerHTML = JSON.stringify(status);
+        pLog.innerHTML = status?.state;
       } catch (error) {
         console.error('error', error);
         pLog.innerHTML = JSON.stringify(error);
@@ -52,7 +52,7 @@
       try {
         var status = await navigator.permissions.query({ name: permissonName });
         console.log('status', status);
-        pLog.innerHTML = JSON.stringify(status);
+        pLog.innerHTML = status?.state;
         status.onchange = () => {
           console.log('${permissonName} permission state has changed to ', this.state);
         };
@@ -74,7 +74,12 @@
 
     var handlerVibrate = (event) => {
       event.preventDefault();
-      window.navigator.vibrate([200, 100, 200]);
+      try{
+        window.navigator.vibrate([200, 100, 200]);
+      } catch (error) {
+        console.error('error', error);
+        pLog.innerHTML = JSON.stringify(error);
+      }
     };
 
     var handlerCameraPermission = (event) => {
