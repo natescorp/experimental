@@ -1,1 +1,85 @@
-empty
+<!DOCTYPE html>
+<html>
+<body>
+<div>
+  <h1>My First Heading</h1>
+  <p>My first paragraph.</p>
+</div>
+<div>
+  <video></video>
+</div>
+<div>
+  <button id="permissions">Permissions</button>
+  <button id="notification">Notification</button>
+  <button id="camera">Camera</button>
+  <button id="vibrate">Vibrate</button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var btnPermissions = document.querySelector('#permissions');
+    var btnNotification = document.querySelector('#notification');
+    var btnCamera = document.querySelector('#camera');
+    var btnVibrate = document.querySelector('#vibrate');
+
+    var getAllPermissions = async () => {
+      try {
+        var status = await navigator.permissions;
+        console.log('status', status);
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+
+    var getPermission = async (permissonName) => {
+      try {
+        var status = await navigator.permissions.query({ name: permissonName });
+        console.log('status', status);
+        status.onchange = () => {
+          console.log('geolocation permission state has changed to ', this.state);
+        };
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+
+    var handlerPermissions = (event) => {
+      event.preventDefault();
+      getAllPermissions();
+    };
+
+    var handlerNotificationPermission = (event) => {
+      event.preventDefault();
+      getPermission('notifications');
+    };
+
+    var handlerVibrate = (event) => {
+      event.preventDefault();
+      window.navigator.vibrate([200, 100, 200]);
+    };
+
+    var handlerCameraPermission = (event) => {
+      event.preventDefault();
+      getPermission('camera');
+      var test = navigator.getUserMedia({ audio: false, video: { width: 1280, height: 720 } },
+      function(stream) {
+         var video = document.querySelector('video');
+         video.srcObject = stream;
+         video.onloadedmetadata = function(e) {
+           video.play();
+         };
+      },
+      function(err) {
+         console.log("The following error occurred: " + err.name);
+      });
+      consool.log(test);
+    };
+
+    btnPermissions.addEventListener('click', handlerPermissions);
+    btnNotification.addEventListener('click', handlerNotificationPermission);
+    btnCamera.addEventListener('click', handlerCameraPermission);
+    btnVibrate.addEventListener('click', handlerVibrate);
+  });
+</script>
+</body>
+</html>
