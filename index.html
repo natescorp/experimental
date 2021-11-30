@@ -104,7 +104,7 @@
         getPermission('camera');
       };
 
-      var handlerCheckAPI = asycn (event) => {
+      var handlerCheckAPI = async (event) => {
         event.preventDefault();
         navigator.getUserMedia && alert('getUserMedia') && await navigator.getUserMedia(onlyVideoConfig);
         navigator.webkitGetUserMedia && alert('webkitGetUserMedia') && await navigator.webkitGetUserMedia(onlyVideoConfig);
