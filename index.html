@@ -104,13 +104,13 @@
         getPermission('camera');
       };
 
-      var handlerCheckAPI = (event) => {
+      var handlerCheckAPI = asycn (event) => {
         event.preventDefault();
-        navigator.getUserMedia && alert('getUserMedia') && navigator.getUserMedia(onlyVideoConfig);
-        navigator.webkitGetUserMedia && alert('webkitGetUserMedia') && navigator.webkitGetUserMedia(onlyVideoConfig);
-        navigator.mozGetUserMedia && alert('mozGetUserMedia') && navigator.mozGetUserMedia(onlyVideoConfig);
-        navigator.msGetUserMedia && alert('msGetUserMedia') && navigator.msGetUserMedia(onlyVideoConfig);
-        navigator.mediaDevices.getUserMedia && alert('mediaDevices.getUserMedia') && navigator.mediaDevices(onlyVideoConfig);
+        navigator.getUserMedia && alert('getUserMedia') && await navigator.getUserMedia(onlyVideoConfig);
+        navigator.webkitGetUserMedia && alert('webkitGetUserMedia') && await navigator.webkitGetUserMedia(onlyVideoConfig);
+        navigator.mozGetUserMedia && alert('mozGetUserMedia') && await navigator.mozGetUserMedia(onlyVideoConfig);
+        navigator.msGetUserMedia && alert('msGetUserMedia') && await navigator.msGetUserMedia(onlyVideoConfig);
+        navigator.mediaDevices.getUserMedia && alert('mediaDevices.getUserMedia') && await navigator.mediaDevices(onlyVideoConfig);
       };
 
       var handlerVibrate = (event) => {
