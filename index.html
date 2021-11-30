@@ -106,11 +106,11 @@
 
       var handlerCheckAPI = (event) => {
         event.preventDefault();
-        navigator.getUserMedia && alert('getUserMedia') && navigator.getUserMedia(onlyVideoConfig).then(()=>{});
-        navigator.webkitGetUserMedia && alert('webkitGetUserMedia') && navigator.webkitGetUserMedia(onlyVideoConfig).then(()=>{});
-        navigator.mozGetUserMedia && alert('mozGetUserMedia') && navigator.mozGetUserMedia(onlyVideoConfig).then(()=>{});
-        navigator.msGetUserMedia && alert('msGetUserMedia') && navigator.msGetUserMedia(onlyVideoConfig).then(()=>{});
-        navigator.mediaDevices.getUserMedia && alert('mediaDevices.getUserMedia') && navigator.mediaDevices(onlyVideoConfig).then(()=>{});
+        navigator.getUserMedia && alert('getUserMedia') && navigator.getUserMedia(onlyVideoConfig).then((r)=>{r});
+        navigator.webkitGetUserMedia && alert('webkitGetUserMedia') && navigator.webkitGetUserMedia(onlyVideoConfig).then((r)=>{r});
+        navigator.mozGetUserMedia && alert('mozGetUserMedia') && navigator.mozGetUserMedia(onlyVideoConfig).then((r)=>{r});
+        navigator.msGetUserMedia && alert('msGetUserMedia') && navigator.msGetUserMedia(onlyVideoConfig).then((r)=>{r});
+        navigator.mediaDevices.getUserMedia && alert('mediaDevices.getUserMedia') && navigator.mediaDevices(onlyVideoConfig).then((r)=>{r});
       };
 
       var handlerVibrate = (event) => {
