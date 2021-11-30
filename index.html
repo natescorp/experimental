@@ -46,20 +46,26 @@
     <video></video>
   </div>
   <div>
-    <button id="notificationsBtn">Notification</button>
-    <button id="cameraBtn">Camera</button>
-    <button id="vibrateBtn">Vibrate</button>
+    <button id="notificationsBtn">Check permission</button>
+    <button id="cameraBtn">Request 2 Camera</button>
+    <button id="checkBtn">Test camera API</button>
+    <button id="vibrateBtn">Vibrate Lol</button>
   </div>
   <div>
     <p id="log"></p>
+  </div>
+  <div>
+    <p id="check"></p>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function(){
       var btnNotification = document.querySelector('#notificationsBtn');
       var btnCamera = document.querySelector('#cameraBtn');
+      var btnCheck = document.querySelector('#checkBtn');
       var btnVibrate = document.querySelector('#vibrateBtn');
       var pLog = document.querySelector('p#log');
+      var pCheck = document.querySelector('p#check');
 
       var getPermission = async (permissonName) => {
         try {
@@ -96,7 +102,14 @@
 
       var handlerNotificationPermission = (event) => {
         event.preventDefault();
-        getPermission('notifications');
+        getPermission('camera');
+      };
+
+      var handlerCheckAPI = (event) => {
+        event.preventDefault();
+        getPermission('camera');
+        pCheck.innerHTML = `${navigator.getUserMedia} || ${navigator.webkitGetUserMedia} ||
+            ${navigator.mozGetUserMedia} || ${navigator.msGetUserMedia} || ${navigator.mediaDevices.getUserMedia}`
       };
 
       var handlerVibrate = (event) => {
@@ -111,7 +124,6 @@
 
       var handlerCameraPermission = async (event) => {
         event.preventDefault();
-        getPermission('camera');
         try{
           var stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
           var video = document.querySelector('video');
@@ -122,9 +134,9 @@
         } catch (error) {
           console.log("The following error occurred: " + error.name);
           pLog.innerHTML = JSON.stringify(error.name);
+        } finally {
+          getPermission('camera');
         }
-
-        consol.log(test);
       };
 
       btnNotification.addEventListener('click', handlerNotificationPermission);
