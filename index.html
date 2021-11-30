@@ -54,9 +54,6 @@
   <div>
     <p id="log"></p>
   </div>
-  <div>
-    <p id="check"></p>
-  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -65,7 +62,6 @@
       var btnCheck = document.querySelector('#checkBtn');
       var btnVibrate = document.querySelector('#vibrateBtn');
       var pLog = document.querySelector('p#log');
-      var pCheck = document.querySelector('p#check');
 
       var getPermission = async (permissonName) => {
         try {
@@ -110,8 +106,11 @@
       var handlerCheckAPI = (event) => {
         event.preventDefault();
         getPermission('camera');
-        pCheck.innerHTML = `${navigator.getUserMedia} || ${navigator.webkitGetUserMedia} ||
-            ${navigator.mozGetUserMedia} || ${navigator.msGetUserMedia} || ${navigator.mediaDevices.getUserMedia}`
+        navigator.getUserMedia && alert('getUserMedia');
+        navigator.webkitGetUserMedia && alert('webkitGetUserMedia');
+        navigator.mozGetUserMedia && alert('mozGetUserMedia');
+        navigator.msGetUserMedia && alert('msGetUserMedia');
+        navigator.mediaDevices.getUserMedia && alert('mediaDevices.getUserMedia');
       };
 
       var handlerVibrate = (event) => {
