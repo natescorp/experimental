@@ -94,7 +94,9 @@
           status.onchange = () => {
             console.log(`${permissonName} permission state has changed to ${this.state}`);
           };
+          alert('ok');
         } catch (error) {
+          alert(error);
           console.error('error', error);
           pLog.innerHTML = JSON.stringify(error);
         }
